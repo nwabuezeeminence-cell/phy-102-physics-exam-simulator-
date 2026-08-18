@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Ultimate Quiz Master - Who Wants to Be a Genius?</title>
+    <link rel="stylesheet" href="millionaire.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="bg-gradient"></div>
+        <div class="floating-shapes">
+            <div class="shape shape1"></div>
+            <div class="shape shape2"></div>
+            <div class="shape shape3"></div>
+            <div class="shape shape4"></div>
+        </div>
+    </div>
+
+    <!-- Start Screen -->
+    <div id="startScreen" class="screen active">
+        <div class="glass-container title-container">
+            <h1 class="game-title">
+                <span class="title-icon">🎯</span>
+                ULTIMATE QUIZ MASTER
+                <span class="title-icon">🏆</span>
+            </h1>
+            <p class="subtitle">Who Wants to Be a Genius?</p>
+            
+            <div class="mode-selection">
+                <h3>🎮 Select Game Mode</h3>
+                
+                <div class="selection-group">
+                    <label>📊 Difficulty Level</label>
+                    <div class="difficulty-buttons">
+                        <button class="mode-btn selected" data-difficulty="easy">
+                            <span class="emoji">🌱</span>
+                            Easy
+                            <span class="desc">30 sec/question</span>
+                        </button>
+                        <button class="mode-btn" data-difficulty="normal">
+                            <span class="emoji">⚡</span>
+                            Normal
+                            <span class="desc">20 sec/question</span>
+                        </button>
+                        <button class="mode-btn" data-difficulty="hard">
+                            <span class="emoji">🔥</span>
+                            Hard
+                            <span class="desc">15 sec/question</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="selection-group">
+                    <label>⏱️ Time Mode</label>
+                    <div class="time-toggles">
+                        <button class="toggle-btn selected" data-timemode="true">⏰ Timed Mode</button>
+                        <button class="toggle-btn" data-timemode="false">🔄 Relaxed Mode</button>
+                    </div>
+                </div>
+
+                <div class="selection-group">
+                    <label>📝 Question Count</label>
+                    <div class="count-selector">
+                        <button class="count-btn" data-count="10">10 Qs</button>
+                        <button class="count-btn selected" data-count="25">25 Qs</button>
+                        <button class="count-btn" data-count="50">50 Qs</button>
+                        <button class="count-btn" data-count="all">All 200</button>
+                    </div>
+                </div>
+
+                <div class="selection-group">
+                    <label>🎯 Question Source</label>
+                    <div class="source-selector">
+                        <select id="topicSelect">
+                            <option value="all">All Topics (200 Questions)</option>
+                            <option value="1">Topic 1: Electrostatics (Q1-20)</option>
+                            <option value="2">Topic 2: Atomic Nucleus (Q21-40)</option>
+                            <option value="3">Topic 3: Magnetic Fields (Q41-60)</option>
+                            <option value="4">Topic 4: Relativity (Q61-80)</option>
+                            <option value="5">Topic 5: Generators & Motors (Q81-100)</option>
+                            <option value="6">Topic 6: Inductance & Circuits (Q101-120)</option>
+                            <option value="7">Topic 7: Magnetic Forces (Q121-140)</option>
+                            <option value="8">Topic 8: Radioactivity (Q141-160)</option>
+                            <option value="9">Topic 9: Atomic Structure (Q161-180)</option>
+                            <option value="10">Topic 10: Electric Potential (Q181-200)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <button class="start-btn" id="startBtn">
+                <span class="btn-icon">🚀</span>
+                START QUIZ
+                <span class="btn-icon">🚀</span>
+            </button>
+
+            <div class="high-score-display">
+                <span class="hs-label">🏆 High Score:</span>
+                <span class="hs-value" id="highScoreDisplay">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="gameScreen" class="screen">
+        <div class="game-layout">
+            <!-- Left Side - Prize Ladder -->
+            <div class="prize-ladder glass-panel">
+                <h3 class="ladder-title">🏆 Prize Ladder</h3>
+                <div class="ladder" id="prizeLadder">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+
+            <!-- Center - Question Area -->
+            <div class="question-area">
+                <div class="game-header glass-panel">
+                    <div class="stats-row">
+                        <div class="stat-item">
+                            <span class="stat-icon">🎯</span>
+                            <span>Question <span id="currentQ">1</span>/<span id="totalQ">25</span></span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-icon">⭐</span>
+                            <span>Score: <span id="currentScore">0</span></span>
+                        </div>
+                        <div class="timer-container" id="timerContainer">
+                            <span class="timer-icon">⏱️</span>
+                            <div class="timer-bar">
+                                <div class="timer-fill" id="timerFill"></div>
+                            </div>
+                            <span class="timer-text" id="timerText">20</span>
+                        </div>
+                        <div class="streak-display" id="streakDisplay">
+                            🔥 <span id="streakCount">0</span> streak
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-panel glass-panel">
+                    <div class="question-badge" id="questionBadge">Question 1</div>
+                    <p class="question-text" id="questionText">Loading question...</p>
+                </div>
+
+                <div class="answers-grid" id="answersGrid">
+                    <button class="answer-btn glass-panel" data-answer="A">
+                        <span class="answer-letter">A</span>
+                        <span class="answer-text">Option A</span>
+                        <span class="answer-icon">✓</span>
+                    </button>
+                    <button class="answer-btn glass-panel" data-answer="B">
+                        <span class="answer-letter">B</span>
+                        <span class="answer-text">Option B</span>
+                        <span class="answer-icon">✓</span>
+                    </button>
+                    <button class="answer-btn glass-panel" data-answer="C">
+                        <span class="answer-letter">C</span>
+                        <span class="answer-text">Option C</span>
+                        <span class="answer-icon">✓</span>
+                    </button>
+                    <button class="answer-btn glass-panel" data-answer="D">
+                        <span class="answer-letter">D</span>
+                        <span class="answer-text">Option D</span>
+                        <span class="answer-icon">✓</span>
+                    </button>
+                </div>
+
+                <div class="lifelines-container" id="lifelinesContainer">
+                    <h3 class="lifelines-title">💡 Lifelines</h3>
+                    <div class="lifelines">
+                        <button class="lifeline-btn" id="lifeline5050" data-lifeline="5050">
+                            <span class="ll-icon">🎰</span>
+                            <span class="ll-name">50:50</span>
+                            <span class="ll-uses" id="ll5050count">1</span>
+                        </button>
+                        <button class="lifeline-btn" id="lifelineAudience" data-lifeline="audience">
+                            <span class="ll-icon">👥</span>
+                            <span class="ll-name">Ask Audience</span>
+                            <span class="ll-uses" id="llAudienceCount">1</span>
+                        </button>
+                        <button class="lifeline-btn" id="lifelinePhone" data-lifeline="phone">
+                            <span class="ll-icon">📞</span>
+                            <span class="ll-name">Phone Friend</span>
+                            <span class="ll-uses" id="llPhoneCount">1</span>
+                        </button>
+                        <button class="lifeline-btn" id="lifelineSkip" data-lifeline="skip">
+                            <span class="ll-icon">⏭️</span>
+                            <span class="ll-name">Skip</span>
+                            <span class="ll-uses" id="llSkipCount">3</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side - Controls -->
+            <div class="controls-panel glass-panel">
+                <button class="control-btn exit-btn" id="exitBtn">
+                    <span>🚪</span> Exit Game
+                </button>
+                <button class="control-btn pause-btn" id="pauseBtn">
+                    <span>⏸️</span> Pause
+                </button>
+                <div class="combo-display" id="comboDisplay">
+                    <span class="combo-label">Combo</span>
+                    <span class="combo-value" id="comboValue">x1</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lifeline Modal -->
+    <div id="lifelineModal" class="modal">
+        <div class="modal-content glass-panel">
+            <h3 id="lifelineTitle">Lifeline Result</h3>
+            <div id="lifelineContent"></div>
+            <button class="modal-close" id="closeLifelineModal">Got it!</button>
+        </div>
+    </div>
+
+    <!-- Pause Modal -->
+    <div id="pauseModal" class="modal">
+        <div class="modal-content glass-panel">
+            <h2>⏸️ Game Paused</h2>
+            <p>Take a breather!</p>
+            <div class="pause-options">
+                <button class="pause-btn-large" id="resumeBtn">▶️ Resume</button>
+                <button class="pause-btn-large" id="restartFromPauseBtn">🔄 Restart</button>
+                <button class="pause-btn-large exit" id="quitFromPauseBtn">🚪 Quit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Screen -->
+    <div id="resultScreen" class="screen">
+        <div class="result-container glass-container">
+            <div id="resultIcon" class="result-icon">🏆</div>
+            <h2 id="resultTitle">Quiz Complete!</h2>
+            <div class="result-stats">
+                <div class="result-stat">
+                    <span class="rs-icon">✅</span>
+                    <span class="rs-label">Correct</span>
+                    <span class="rs-value" id="correctCount">0</span>
+                </div>
+                <div class="result-stat">
+                    <span class="rs-icon">❌</span>
+                    <span class="rs-label">Wrong</span>
+                    <span class="rs-value" id="wrongCount">0</span>
+                </div>
+                <div class="result-stat">
+                    <span class="rs-icon">🎯</span>
+                    <span class="rs-label">Accuracy</span>
+                    <span class="rs-value" id="accuracy">0%</span>
+                </div>
+                <div class="result-stat highlight">
+                    <span class="rs-icon">⭐</span>
+                    <span class="rs-label">Final Score</span>
+                    <span class="rs-value" id="finalScore">0</span>
+                </div>
+                <div class="result-stat">
+                    <span class="rs-icon">🔥</span>
+                    <span class="rs-label">Best Streak</span>
+                    <span class="rs-value" id="bestStreak">0</span>
+                </div>
+                <div class="result-stat">
+                    <span class="rs-icon">⏱️</span>
+                    <span class="rs-label">Time Used</span>
+                    <span class="rs-value" id="timeUsed">0s</span>
+                </div>
+            </div>
+            <div class="result-message" id="resultMessage"></div>
+            <div class="result-actions">
+                <button class="result-btn primary" id="playAgainBtn">
+                    <span>🔄</span> Play Again
+                </button>
+                <button class="result-btn secondary" id="mainMenuBtn">
+                    <span>🏠</span> Main Menu
+                </button>
+                <button class="result-btn secondary" id="shareScoreBtn">
+                    <span>📤</span> Share Score
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sound Toggle -->
+    <button class="sound-toggle" id="soundToggle" title="Toggle Sound">
+        <span id="soundIcon">🔊</span>
+    </button>
+
+    <script src="millionaire.js"></script>
+</body>
+  </html>
+  
